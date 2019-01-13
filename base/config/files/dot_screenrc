@@ -1,0 +1,12 @@
+escape ^Rr
+vbell off
+autodetach on
+defutf8 on
+bind ^k kill
+
+markkeys "h=^B:l=^F:$=^E"
+
+bind 2 split
+bind 1 only
+bind 0 remove
+bind o focus

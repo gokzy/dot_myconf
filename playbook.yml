@@ -1,0 +1,9 @@
+- hosts: all
+  become: yes
+  roles:
+    - { role: prepare,         become_user: root   }
+    - { role: base/install,    become_user: root   }
+    - { role: base/config,     become_user: k-goda }
+    - { role: develop/install, become_user: root   }
+    - { role: develop/config,  become_user: k-goda } 
+    - { role: network/install, become_user: root   }

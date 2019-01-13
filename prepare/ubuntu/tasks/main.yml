@@ -1,0 +1,18 @@
+- name: "Upgrade All Packages on System"
+  apt: upgrade=dist update_cache=no
+  become_user: root
+
+- name: "Install zsh"
+  apt:
+    name: [ "zsh" ]
+  become_user: root
+
+- name: "Add user k-goda"
+  user:
+    name: k-goda
+    shell: /usr/bin/zsh
+    password: $6$y5sFFNrc$rkacktGpEwPSLzWccu6UJ5h7cde2ilXNGhzpKGqGtBppZR5KhvHnJ7WWJ9Sr4YSb07KJBflznCUcDBHQ0yJfq/
+    uid: 10560
+    groups: adm,cdrom,sudo,dip,plugdev
+    append: yes
+  become_user: root

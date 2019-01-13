@@ -1,0 +1,48 @@
+######################################################
+# Install Developmet Packages
+######################################################
+- name: "Install Development Packages"
+  openbsd_pkg:
+    name: "{{ item }}"
+    state: present
+  with_list:
+    - "git" 
+    - "tig" 
+    - "subversion"
+    - "emacs--no_x11"
+    - "vim--no_x11"
+    - "gmake"
+  become_user: root
+
+# ################################
+# Install global from source
+# ################################
+- block:
+  - name: "Cleanup {{ global_working_dir }}/global-{{ global_version }}"
+    file:
+      path: "{{ global_working_dir }}/global-{{ global_version }}"
+      state: absent
+  - name: "Get global-{{ global_version }} tar ball"
+    get_url: 
+      url: "http://tamacom.com/global/global-{{ global_version }}.tar.gz"
+      dest: "{{ global_working_dir }}"
+      validate_certs: no
+  - name: "Expand global-{{ global_version }} tar ball"
+    command: "tar zxvf global-{{ global_version }}.tar.gz"
+    args:
+      chdir: "{{ global_working_dir }}"
+      creates: "{{ global_working_dir }}/global-{{ global_version }}"
+  - name: "./configure --prefix=/usr/local"
+    shell: "CC=clang ./configure --prefix=/usr/local"
+    args:
+      chdir: "{{ global_working_dir }}/global-{{ global_version }}"
+  - name: "Do make"
+    command: "make -j 4"
+    args:
+      chdir: "{{ global_working_dir }}/global-{{ global_version }}"
+  - name: "Do make & install byobu"
+    command: "make install"
+    args:
+      chdir: "{{ global_working_dir }}/global-{{ global_version }}"
+  become_user: root
+

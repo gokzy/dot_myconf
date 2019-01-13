@@ -1,0 +1,49 @@
+######################################################
+# Install Base packages
+######################################################
+- name: "Install Packages for Shell"
+  openbsd_pkg:
+    name: "zsh"
+    state: present
+
+- name: "Install Packages for Utils"
+  openbsd_pkg:
+    name: "{{ item }}"
+    state: present
+  with_list:
+    - "colorls"
+    - "colortree"
+    - "colordiff"
+    - "curl"
+    - "wget"
+    - "git"
+    - "screen--"
+
+- block:
+  - name: "Cleanup {{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+    file:
+      path: "{{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+      state: absent
+  - name: "Get byobu{{ byobu_version }} tar ball"
+    get_url:
+      url: "https://launchpad.net/byobu/trunk/{{ byobu_version }}/+download/byobu_{{ byobu_version }}.orig.tar.gz"
+      dest: "{{ byobu_working_dir }}"
+      validate_certs: no
+  - name: "Expand byobu tar ball"
+    command: "tar zxvf byobu_{{ byobu_version }}.orig.tar.gz"
+    args:
+      chdir: "{{ byobu_working_dir }}"
+      creates: "{{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+  - name: "./configure --prefix=/usr/local for byobu"
+    command: ./configure --prefix=/usr/local
+    args:
+      chdir: "{{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+  - name: "Do make"
+    command: make
+    args:
+      chdir: "{{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+  - name: "Do make & install byobu"
+    command: "make install"
+    args:
+      chdir: "{{ byobu_working_dir }}/byobu-{{ byobu_version }}"
+

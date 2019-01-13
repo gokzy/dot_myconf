@@ -1,0 +1,49 @@
+- name: "Install Development Packages"
+  apt:
+    name: [
+      "git", 
+      "tig", 
+      "subversion",
+      "build-essential",
+      "emacs25-nox",
+      "vim",
+      "global"
+    ]
+
+- block:
+  - name: "Install Python3.7"
+    apt:
+      name: [ "python3", "python3-pip" ]
+  - name: "Install iPython"
+    pip:
+      name: ipython
+      executable: pip3
+
+- block:
+  - name: "Add PPA repository"
+    apt_repository:
+      repo: ppa:longsleep/golang-backports
+      state: present
+  - name: "Install Go lang"
+    apt:
+      name: [
+        "golang-go"
+      ]
+
+- block:
+    - name: Install the gpg key for nodejs LTS
+      apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+        state: present
+
+    - name: Install the nodejs LTS repos
+      apt_repository:
+        repo: "deb https://deb.nodesource.com/node_10.x bionic main"
+        state: present
+        update_cache: yes
+
+    - name: Install the nodejs
+      apt:
+        name: nodejs
+        state: present
+

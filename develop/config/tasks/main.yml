@@ -1,0 +1,31 @@
+######################################################
+# Setup Spacemacs
+######################################################
+- block:
+  - name: "Clone Spacemacs from github"
+    git:
+      repo: "https://github.com/syl20bnr/spacemacs"
+      dest:  "/home/k-goda/.emacs.d"
+  - name: "Put openbsd-knf-style.el"
+    copy: src=develop/config/files/emacs/openbsd-knf-style.el dest=/home/k-goda/.emacs.d/private/openbsd-style/ force=yes backup=no
+  - name: "Put .spacemacs"
+    copy: src=develop/config/files/emacs/dot_spacemacs dest=/home/k-goda/.spacemacs force=yes backup=no
+
+######################################################
+# Setup Go lang
+######################################################
+- block:
+  - name: "Create GOPATH"
+    file:
+      path: /home/k-goda/.golang
+      state: directory
+  - name: "Get some tools for emacs"
+    command: "zsh -lc \". ~/.zshrc; {{ item }}\""
+    with_list:
+      - "go get -u -v github.com/nsf/gocode"
+      - "go get -u -v github.com/rogpeppe/godef"
+      - "go get -u -v golang.org/x/tools/cmd/guru"
+      - "go get -u -v golang.org/x/tools/cmd/gorename"
+      - "go get -u -v golang.org/x/tools/cmd/goimports"
+      - "go get -u -v github.com/alecthomas/gometalinter"
+      - "gometalinter --install --update"

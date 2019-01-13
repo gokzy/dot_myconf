@@ -1,0 +1,37 @@
+######################################################
+# Configuration zsh
+######################################################
+- block:
+  - name: "Clone oh-my-zsh from github"
+    git:
+      repo: "https://github.com/robbyrussell/oh-my-zsh.git"
+      dest: "/home/k-goda/.oh-my-zsh"
+  - name: "Put .zshrc"
+    copy: src=base/config/files/dot_zshrc dest=/home/k-goda/.zshrc force=yes backup=no
+
+######################################################
+# Configuration byobu
+######################################################
+- name: "Put configure files for byobu on ~/.byobu"
+  copy: src=base/config/files/dot_byobu/ dest=/home/k-goda/.byobu force=yes backup=no
+
+######################################################
+# Configuration screen
+######################################################
+- name: "Put configure files for screen on ~/.screenrc"
+  copy: src=base/config/files/dot_screenrc dest=/home/k-goda/.screenrc force=yes backup=no
+
+######################################################
+# Configuration SSH authorized key
+######################################################
+- block:
+  - name: "Create tmp directory"
+    file:
+      path: /home/k-goda/.ansible/tmp/remote_tmp
+      state: directory
+      mode: 0700
+  - name: "Set authorized key from github"
+    authorized_key:
+      user: k-goda
+      state: present
+      key: https://github.com/gokzy.keys

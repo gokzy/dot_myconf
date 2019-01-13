@@ -1,0 +1,9 @@
+- name: "Install Packages for Utils"
+  apt:
+    name: [
+      "tree",
+      "git",
+      "curl",
+      "wget",
+      "screen"
+    ]
