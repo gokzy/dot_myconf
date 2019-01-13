@@ -1,0 +1,61 @@
+- name: "Include version vars"
+  include_vars: "../../anyenv_version.yml"
+- name: "Include home directory vars"
+  include_vars: "../../../vars/home_dir/{{ ansible_os_family }}.yml"
+
+- name: "Install Development Packages"
+  homebrew:
+    name: [
+      "tig", 
+      "global",
+      "emacs"
+    ]
+    state: present
+  become_user: k-goda
+
+- block:
+  - name: "Install Python3"
+    homebrew:
+      name: [
+        "python3"
+      ]
+  - name: "Install iPython"
+    pip:
+      name: [
+        "pip",
+        "ipython"
+      ]
+      executable: pip3
+      state: latest
+  become_user: k-goda
+
+- block:
+  - name: "Install goenv"
+    homebrew:
+      name: [
+        "goenv"
+      ]
+      state: present
+  - name: "Install go ver {{ GO_VERSION }}"
+    command: "zsh -lc \". ~/.zshrc; {{ item }}\""
+    with_list:
+      - "goenv install -s {{ GO_VERSION }}"
+      - "goenv global {{ GO_VERSION }}"
+  become_user: k-goda
+
+- block:
+  - name: "Install ndenv"
+    homebrew:
+      name: [
+        "ndenv",
+      ]
+  - name: "Instal node-build plugin"
+    git:
+      repo: "https://github.com/riywo/node-build.git"
+      dest: "{{ HOME }}/.ndenv/plugins/node-build"
+  - name: "Install node.js v{{ NODE_VERSION }} and set global"
+    command: "zsh -lc \". ~/.zshrc; {{ item }}\""
+    with_list:
+      - "ndenv install -s v{{ NODE_VERSION }}"
+      - "ndenv global v{{ NODE_VERSION }}"
+  become_user: k-goda

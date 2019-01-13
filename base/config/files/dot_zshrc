@@ -53,8 +53,16 @@ bindkey '^p' history-substring-search-up
 bindkey '^n' history-substring-search-down
 
 # Go lang
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init --no-rehash -)"
+
 export GOPATH=$HOME/.golang
 export PATH=$PATH:$GOPATH/bin
+
+# node.js
+export PATH="$HOME/.ndenv/bin:$PATH"
+eval "$(ndenv init -)"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8

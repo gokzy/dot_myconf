@@ -1,0 +1,8 @@
+- name: "Install Packages for Utils"
+  homebrew:
+    name: [
+      "tree",
+      "wget",
+    ]
+    state: present
+  become_user: k-goda
