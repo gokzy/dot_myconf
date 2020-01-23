@@ -1,5 +1,9 @@
 - name: "Include vars"
   include_vars: "../../../vars/home_dir/{{ ansible_os_family }}.yml"
+- name: "Include git vars"
+  include_vars: "../../../vars/git.yml"
+- name: "Include pripub vars"
+  include_vars: "../../../vars/pripub.yml"
 
 ######################################################
 # Configuration zsh
@@ -47,13 +51,13 @@
     authorized_key:
       user: k-goda
       state: present
-      key: https://github.com/gokzy.keys
+      key: "{{ SSH_KEYS }}"
 
 ######################################################
 # git configuration
 ######################################################
-- git_config: name=user.name scope=global value="GODA Kazuya"
-- git_config: name=user.email scope=global value="git@gokzy.com"
+- git_config: name=user.name scope=global value="{{ GIT_USER }}"
+- git_config: name=user.email scope=global value="{{ GIT_EMAIL }}"
 - git_config: name=color.ui scope=global value=true
 - git_config: name=grep.lineNumber scope=global value=true
 - git_config: name=alias.find scope=global value="grep -H --heading --break"

@@ -2,7 +2,10 @@
   homebrew:
     name: [
       "tree",
+      "git",
+      "curl",
       "wget",
+      "screen",
       "z",
       "peco"
     ]

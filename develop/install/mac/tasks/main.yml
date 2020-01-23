@@ -1,14 +1,14 @@
-- name: "Include version vars"
-  include_vars: "../../anyenv_version.yml"
 - name: "Include home directory vars"
   include_vars: "../../../vars/home_dir/{{ ansible_os_family }}.yml"
+- name: "Include "
+  include_vars: "../../../vars/lang_ver.yml"
 
 - name: "Install Development Packages"
   homebrew:
     name: [
-      "tig", 
+      "tig",
       "global",
-      "emacs"
+      "emacs",
     ]
     state: present
   become_user: k-goda
@@ -27,20 +27,37 @@
       ]
       executable: pip3
       state: latest
+  - name: "Install iPython"
+    pip:
+      name: [
+        "virtualenv",
+        "virtualenvwrapper"
+      ]
+      executable: pip3
+      state: latest
+  - name: "Install Pyenv"
+    git:
+      repo: "https://github.com/pyenv/pyenv.git"
+      dest: "{{ HOME }}/.pyenv"
   become_user: k-goda
 
 - block:
   - name: "Install goenv"
-    homebrew:
-      name: [
-        "goenv"
-      ]
-      state: present
-  - name: "Install go ver {{ GO_VERSION }}"
-    command: "zsh -lc \". ~/.zshrc; {{ item }}\""
-    with_list:
-      - "goenv install -s {{ GO_VERSION }}"
-      - "goenv global {{ GO_VERSION }}"
+    git:
+      repo: "https://github.com/syndbg/goenv.git"
+      dest:  "{{ HOME }}/.goenv"
+  - name: "Create GOPATH"
+    file:
+      path: "{{ HOME }}/.golang"
+      state: directory
+  - name: "Install go {{ GO_VERSION }}"
+    shell: "export GOENV_ROOT=$HOME/.goenv && export GOPATH=$HOME/.golang && PATH=$GOENV_ROOT/bin:$PATH && eval \"$(goenv init -)\" && goenv install -f {{ GO_VERSION }}"
+    args:
+      executable: "/usr/local/bin/zsh"
+  - name: "Set global versioin"
+    shell: "export GOENV_ROOT=$HOME/.goenv && export GOPATH=$HOME/.golang && PATH=$GOENV_ROOT/bin:$PATH && eval \"$(goenv init -)\" && goenv global {{ GO_VERSION }}"
+    args:
+      executable: "/usr/local/bin/zsh"
   become_user: k-goda
 
 - block:

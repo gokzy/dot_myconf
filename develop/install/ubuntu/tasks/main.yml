@@ -65,4 +65,3 @@
       dest: "{{ HOME }}/.pyenv"
   become_user: k-goda
 
-  
