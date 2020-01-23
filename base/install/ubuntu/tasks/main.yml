@@ -1,3 +1,8 @@
+- name: "Include home directory vars"
+  include_vars: "../../../vars/home_dir/{{ ansible_os_family }}.yml"
+- name: "Include lang version vars"
+  include_vars: "../../../vars/lang_ver.yml"
+
 - name: "Install Packages for Utils"
   apt:
     name: [
@@ -5,5 +10,6 @@
       "git",
       "curl",
       "wget",
-      "screen"
+      "screen",
+      "peco"
     ]

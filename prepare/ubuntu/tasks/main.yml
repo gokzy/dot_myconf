@@ -1,10 +1,10 @@
 - name: "Upgrade All Packages on System"
-  apt: upgrade=dist update_cache=no
+  apt: upgrade=dist update_cache=yes
   become_user: root
 
-- name: "Install zsh"
+- name: "Install packages that are requried working ansible"
   apt:
-    name: [ "zsh" ]
+    name: [ "zsh", "ansible" ]
   become_user: root
 
 - name: "Add user k-goda"
@@ -15,4 +15,8 @@
     uid: 10560
     groups: adm,cdrom,sudo,dip,plugdev
     append: yes
+  become_user: root
+
+- name: "Unconditionally reboot the machine with all defaults"
+  reboot:
   become_user: root

@@ -3,6 +3,8 @@
     name: [
       "tree",
       "wget",
+      "z",
+      "peco"
     ]
     state: present
   become_user: k-goda

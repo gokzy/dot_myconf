@@ -9,6 +9,16 @@
     git:
       repo: "https://github.com/robbyrussell/oh-my-zsh.git"
       dest: "{{ HOME }}/.oh-my-zsh"
+  - name: "Clone Powerlevel9k theme"
+    git:
+      repo: "https://github.com/bhilburn/powerlevel9k.git"
+      dest: "{{ HOME }}/.oh-my-zsh/custom/themes/powerlevel9k"
+  - name: "Clone rupa/z"
+    git:
+      repo: "https://github.com/rupa/z"
+      dest: "{{ HOME }}/.oh-my-zsh/custom/plugins/z"
+  - name: "Copy peco.zsh"
+    copy: src=base/config/files/peco.zsh dest="{{ HOME }}/.oh-my-zsh/custom/peco.zsh" force=yes backup=no
   - name: "Put .zshrc"
     copy: src=base/config/files/dot_zshrc dest="{{ HOME }}/.zshrc" force=yes backup=no
 
@@ -38,3 +48,13 @@
       user: k-goda
       state: present
       key: https://github.com/gokzy.keys
+
+######################################################
+# git configuration
+######################################################
+- git_config: name=user.name scope=global value="GODA Kazuya"
+- git_config: name=user.email scope=global value="git@gokzy.com"
+- git_config: name=color.ui scope=global value=true
+- git_config: name=grep.lineNumber scope=global value=true
+- git_config: name=alias.find scope=global value="grep -H --heading --break"
+- git_config: name=core.editor scope=global value="vi -u NONE -N"

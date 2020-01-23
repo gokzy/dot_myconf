@@ -1,0 +1,27 @@
+- name: "Include home directory vars"
+  include_vars: "../../../vars/home_dir/{{ ansible_os_family }}.yml"
+- name: "Include lang version vars"
+  include_vars: "../../../vars/lang_ver.yml"
+
+#################################
+# Setup Go lang
+#################################
+- block:
+  - name: "Install goenv"
+    git:
+      repo: "https://github.com/syndbg/goenv.git"
+      dest:  "{{ HOME }}/.goenv"
+  - name: "Create GOPATH"
+    file:
+      path: "{{ HOME }}/.golang"
+      state: directory
+  - name: "Install go {{ GO_VERSION }}"
+    shell: "export GOENV_ROOT=$HOME/.goenv && export GOPATH=$HOME/.golang && PATH=$GOENV_ROOT/bin:$PATH && eval \"$(goenv init -)\" && goenv install -f {{ GO_VERSION }}"
+    args:
+      executable: "/usr/bin/zsh"
+  - name: "Set global versioin"
+    shell: "export GOENV_ROOT=$HOME/.goenv && export GOPATH=$HOME/.golang && PATH=$GOENV_ROOT/bin:$PATH && eval \"$(goenv init -)\" && goenv global {{ GO_VERSION }}"
+    args:
+      executable: "/usr/bin/zsh"
+  become_user: k-goda
+  

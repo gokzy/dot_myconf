@@ -1,0 +1,6 @@
+- block:
+    - name: "Install ghq"
+      shell: "export GOENV_ROOT=$HOME/.goenv && export GOPATH=$HOME/.golang && PATH=$GOENV_ROOT/bin:$PATH && eval \"$(goenv init -)\" && go get github.com/motemen/ghq"
+      args:
+        executable: "/usr/bin/zsh"
+      become_user: k-goda
