@@ -1,0 +1,6 @@
+[ubuntu]
+ansible-test01
+
+[ubuntu:vars]
+ansible_python_interpreter=/usr/bin/python3
+
